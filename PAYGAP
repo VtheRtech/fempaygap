@@ -1,0 +1,16 @@
+
+----------window functions-----------------
+
+SELECT Entity,[Year],[Gender wage gap (%)] FROM ['gender-wage-gap-vs-gdp-per-capi$']
+WHERE [Gender wage gap (%)] is not null
+ORDER BY [Gender wage gap (%)] DESC
+
+SELECT Entity,[Year],[Gender wage gap (%)]
+FROM
+	(SELECT Entity,[Year],[Gender wage gap (%)],
+		rank()OVER (PARTITION BY Entity ORDER BY [Year] desc, [Gender wage gap (%)]) AS pos
+	FROM ['gender-wage-gap-vs-gdp-per-capi$'] WHERE [Gender wage gap (%)] is not null
+	) AS ss	WHERE pos =1 
+	ORDER BY [Gender wage gap (%)] desc;
+  
+  -------------------DBO1---------------
